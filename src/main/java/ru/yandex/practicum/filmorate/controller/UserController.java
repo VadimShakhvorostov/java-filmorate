@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import ch.qos.logback.core.joran.conditional.IfAction;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ public class UserController {
     @PostMapping
     public User create(@Valid @RequestBody User user) {
         validation(user);
-        if (user.getName() == null || user.getName().isBlank()){
+        if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
         user.setId(getNextId());
@@ -38,20 +37,20 @@ public class UserController {
 
     @PutMapping
     public User update(@RequestBody User newUser) {
-        if (!users.containsKey(newUser.getId())){
+        if (!users.containsKey(newUser.getId())) {
             throw new NotFoundException("Пользователь с id " + newUser.getId() + "не найден");
         }
         User oldUser = users.get(newUser.getId());
-        if (newUser.getName() != null){
+        if (newUser.getName() != null) {
             oldUser.setName(newUser.getName());
         }
-        if (newUser.getLogin() != null){
+        if (newUser.getLogin() != null) {
             oldUser.setLogin(newUser.getLogin());
         }
-        if (newUser.getBirthday() != null){
+        if (newUser.getBirthday() != null) {
             oldUser.setBirthday(newUser.getBirthday());
         }
-        if (newUser.getEmail() != null){
+        if (newUser.getEmail() != null) {
             oldUser.setEmail(newUser.getEmail());
         }
         log.info("Пользователь - {} - обновлен", oldUser);
@@ -65,16 +64,16 @@ public class UserController {
         if (!user.getEmail().contains("@")) {
             throw new ValidationException("Имейл должен содержать @");
         }
-        if (user.getLogin() == null || user.getLogin().isBlank()){
+        if (user.getLogin() == null || user.getLogin().isBlank()) {
             throw new ValidationException("Логин не может быть пустым");
         }
 
-        if (user.getLogin().contains(" ")){
+        if (user.getLogin().contains(" ")) {
             throw new ValidationException("Логин не может содержать пробелы");
         }
 
-        if (user.getBirthday() != null){
-            if (user.getBirthday().isAfter(LocalDate.now())){
+        if (user.getBirthday() != null) {
+            if (user.getBirthday().isAfter(LocalDate.now())) {
                 throw new ValidationException("Дата рождения не может быть в будущем");
             }
         }

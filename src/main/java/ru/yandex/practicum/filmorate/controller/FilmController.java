@@ -1,8 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -26,7 +24,7 @@ public class FilmController {
         validation(film);
         film.setId(getNextId());
         films.put(film.getId(), film);
-        log.info("Фильм - {} -  создан  " , film);
+        log.info("Фильм - {} -  создан  ", film);
         return film;
     }
 
@@ -55,7 +53,7 @@ public class FilmController {
         if (newFilm.getReleaseDate() != null) {
             oldFilm.setReleaseDate(newFilm.getReleaseDate());
         }
-        log.info("Фильм - {} -  обновлен  " , oldFilm);
+        log.info("Фильм - {} -  обновлен  ", oldFilm);
         return oldFilm;
     }
 
@@ -67,7 +65,7 @@ public class FilmController {
         if (film.getDescription().length() > 200) {
             throw new ValidationException("Описание не может содержать более 200 символов");
         }
-        if (film.getReleaseDate().isBefore(MINIMUM_RELEASE_DATE) ) {
+        if (film.getReleaseDate().isBefore(MINIMUM_RELEASE_DATE)) {
             throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895");
         }
         if (film.getDuration() <= 0) {
