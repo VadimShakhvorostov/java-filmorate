@@ -10,7 +10,6 @@ import java.time.LocalDate;
 
 public class FilmTest {
     FilmController filmController = new FilmController();
-    boolean exception = false;
 
     @Test
     void createFilm() {
@@ -19,25 +18,11 @@ public class FilmTest {
     }
 
     @Test
-    void createFilmWithoutName() {
-        try {
-            Film film = Film.builder().description("test").releaseDate(LocalDate.now()).duration(90).build();
-        } catch (NullPointerException e) {
-            exception = true;
-        }
-        Assertions.assertTrue(exception);
-    }
-
-    @Test
     void createFilmDescriptionLength201() {
         String description = "1".repeat(201);
         Film film = Film.builder().name("test").description(description).releaseDate(LocalDate.now()).duration(90).build();
-        try {
-            filmController.addFilm(film);
-        } catch (ValidationException e) {
-            exception = true;
-        }
-        Assertions.assertTrue(exception);
+        ValidationException v = Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film));
+
     }
 
     @Test
@@ -50,12 +35,7 @@ public class FilmTest {
     @Test
     void createFilmReleaseDateBeforeMinimum() {
         Film film = Film.builder().name("test").description("description").releaseDate(LocalDate.of(1895, 12, 27)).duration(90).build();
-        try {
-            filmController.addFilm(film);
-        } catch (ValidationException e) {
-            exception = true;
-        }
-        Assertions.assertTrue(exception);
+        ValidationException v = Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film));
     }
 
     @Test
@@ -67,12 +47,7 @@ public class FilmTest {
     @Test
     void createFilmDurationNegative() {
         Film film = Film.builder().name("test").description("test").releaseDate(LocalDate.now()).duration(-1).build();
-        try {
-            filmController.addFilm(film);
-        } catch (ValidationException e) {
-            exception = true;
-        }
-        Assertions.assertTrue(exception);
+        ValidationException v = Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film));
     }
 
     @Test

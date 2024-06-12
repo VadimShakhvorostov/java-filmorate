@@ -1,9 +1,9 @@
 package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 
 import java.time.LocalDate;
 
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class User {
     private int id;
-    @NonNull
+    @NotBlank
     @Email
     private String email;
     private String login;
