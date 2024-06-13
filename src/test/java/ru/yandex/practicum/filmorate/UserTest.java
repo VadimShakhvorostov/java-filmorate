@@ -15,7 +15,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-
 public class UserTest {
     UserController userController = new UserController();
     Validator validator;

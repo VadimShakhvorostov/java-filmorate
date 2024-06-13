@@ -19,7 +19,6 @@ public class UserController {
     private final Map<Integer, User> users = new HashMap<>();
     private int counterId;
 
-
     @PostMapping
     public User create(@Valid @RequestBody User user) {
         validation(user);
@@ -47,7 +46,6 @@ public class UserController {
         return newUser;
     }
 
-
     private void validation(User user) {
         if (user.getLogin() == null || user.getLogin().isBlank()) {
             throw new ValidationException("Логин не может быть пустым");
@@ -63,5 +61,4 @@ public class UserController {
     private int getNextId() {
         return ++counterId;
     }
-
 }
