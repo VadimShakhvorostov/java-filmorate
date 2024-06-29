@@ -150,7 +150,7 @@ public class UserTest {
                 .build();
         userController.create(user1);
         userController.create(user2);
-        userController.аddAsFriend(user1.getId(), user2.getId());
+        userController.addAsFriend(user1.getId(), user2.getId());
         Assertions.assertEquals(user1.getFriendsId().contains(user2.getId()),
                 user2.getFriendsId().contains(user1.getId()));
     }
@@ -166,7 +166,7 @@ public class UserTest {
         int unknownId = 69;
         userService.create(user1);
         Assertions.assertThrows(NotFoundException.class,
-                () -> userController.аddAsFriend(user1.getId(), unknownId));
+                () -> userController.addAsFriend(user1.getId(), unknownId));
     }
 
     @Test
@@ -185,7 +185,7 @@ public class UserTest {
                 .build();
         userController.create(user1);
         userController.create(user2);
-        userController.аddAsFriend(user1.getId(), user2.getId());
+        userController.addAsFriend(user1.getId(), user2.getId());
         userController.removeFromFriends(user1.getId(), user2.getId());
         Assertions.assertEquals(user1.getFriendsId().contains(user2.getId()),
                 user2.getFriendsId().contains(user1.getId()));
@@ -207,7 +207,7 @@ public class UserTest {
                 .build();
         userController.create(user1);
         userController.create(user2);
-        userController.аddAsFriend(user1.getId(), user2.getId());
+        userController.addAsFriend(user1.getId(), user2.getId());
         Collection<User> friends = Arrays.asList(user2);
         Assertions.assertEquals(userController.findFriends(user1.getId()), friends);
     }
@@ -235,8 +235,8 @@ public class UserTest {
         userController.create(user1);
         userController.create(user2);
         userController.create(user3);
-        userController.аddAsFriend(user1.getId(), user2.getId());
-        userController.аddAsFriend(user3.getId(), user2.getId());
+        userController.addAsFriend(user1.getId(), user2.getId());
+        userController.addAsFriend(user3.getId(), user2.getId());
         Collection<User> friends = Arrays.asList(user2);
         Assertions.assertEquals(userController.mutualFriends(user1.getId(), user3.getId()), friends);
 

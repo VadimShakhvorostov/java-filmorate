@@ -23,7 +23,7 @@ public class UserService {
         this.storage = storage;
     }
 
-    public void аddAsFriend(int id, int friendId) {
+    public void addAsFriend(int id, int friendId) {
         storage.getUserById(id).getFriendsId().add(friendId);
         storage.getUserById(friendId).getFriendsId().add(id);
     }

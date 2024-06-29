@@ -14,7 +14,7 @@ import java.util.Collection;
 @Slf4j
 public class UserController {
 
-    final private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -42,8 +42,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public void аddAsFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
-        userService.аddAsFriend(id, friendId);
+    public void addAsFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
+        userService.addAsFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
