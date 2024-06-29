@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
@@ -99,7 +98,8 @@ public class UserTest {
                 .name("test")
                 .birthday(LocalDate.of(2000, 1, 1))
                 .build();
-        ValidationException v = Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
@@ -110,7 +110,8 @@ public class UserTest {
                 .name("test")
                 .birthday(LocalDate.of(2000, 1, 1))
                 .build();
-        ValidationException v = Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
@@ -131,7 +132,8 @@ public class UserTest {
                 .name("test")
                 .birthday(LocalDate.of(2025, 1, 1))
                 .build();
-        ValidationException v = Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test

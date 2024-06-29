@@ -1,11 +1,14 @@
 package ru.yandex.practicum.filmorate;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
@@ -14,6 +17,9 @@ import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
+import java.util.Set;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class FilmTest {
 
@@ -23,6 +29,12 @@ public class FilmTest {
     UserController userController = new UserController(userService);
     FilmService filmService = new FilmService(inMemoryFilmStorage, userService);
     FilmController filmController = new FilmController(filmService);
+    Validator validator;
+
+    @BeforeEach
+    public void setUp() {
+        validator = Validation.buildDefaultValidatorFactory().getValidator();
+    }
 
     @Test
     void createFilm() {
@@ -33,22 +45,24 @@ public class FilmTest {
     @Test
     void createFilmDescriptionLength201() {
         String description = "1".repeat(201);
-        Film film = Film.builder().name("test").description(description).releaseDate(LocalDate.now()).duration(90).build();
-        ValidationException v = Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film));
-
+        Film film = Film.builder().name("test").description(description).releaseDate(LocalDate.of(2000, 12, 22)).duration(90).build();
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        System.out.println(violations);
+        assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
     void createFilmDescriptionLength200() {
         String description = "1".repeat(200);
-        Film film = Film.builder().name("test").description(description).releaseDate(LocalDate.now()).duration(90).build();
+        Film film = Film.builder().name("test").description(description).releaseDate(LocalDate.of(2000, 12, 22)).duration(90).build();
         Assertions.assertEquals(film, filmController.addFilm(film));
     }
 
     @Test
     void createFilmReleaseDateBeforeMinimum() {
         Film film = Film.builder().name("test").description("description").releaseDate(LocalDate.of(1895, 12, 27)).duration(90).build();
-        ValidationException v = Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film));
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
@@ -59,8 +73,9 @@ public class FilmTest {
 
     @Test
     void createFilmDurationNegative() {
-        Film film = Film.builder().name("test").description("test").releaseDate(LocalDate.now()).duration(-1).build();
-        ValidationException v = Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film));
+        Film film = Film.builder().name("test").description("test").releaseDate(LocalDate.of(2000, 12, 22)).duration(-1).build();
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
